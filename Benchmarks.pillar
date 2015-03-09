@@ -31,7 +31,7 @@ Remember you must have the native driver install it. You can install them trough
 
 !!!Results in Linux
 
-!!PostgreSQL
+!!!PostgreSQL
 In this case, we not only do benchmarks, but also compare the results with squeak native PostgreSQL driver.
 PostgreSQL 8.3, localhost
 
@@ -42,42 +42,42 @@ PostgreSQL 8.3, localhost
 |benchmarkSelect100	|44.3 AVG	|42.32 AVG	|selecting 100 rows, squeak types
 |benchmarkSelect1000	|430.1 AVG	|428.82 AVG	|selecting 1000 rows, squeak types
 
-!!MySQL
+!!!MySQL
 
-|Benchmark	SqueakDBX Time (millis)	Native driver Time (millis)	Explanation
-|benchmarkInsert	196.5 AVG	278.9 AVG	inserting 800 rows, all strings
-|benchmarkInsertConverted	748.9 AVG	740.2 AVG	inserting 800 rows, squeak types
-|benchmarkSelect10	5.4 AVG	7.8 AVG	selecting 10 rows, squeak types
-|benchmarkSelect100	49.2 AVG	55.9 AVG	selecting 100 rows, squeak types
-|benchmarkSelect1000	485.5 AVG	537.4 AVG	selecting 1000 rows, squeak types
+|!Benchmark	|!SqueakDBX Time (millis)	|!Native driver Time (millis)	|!Explanation
+|benchmarkInsert	|196.5 AVG	|278.9 AVG	|inserting 800 rows, all strings
+|benchmarkInsertConverted	|748.9 AVG	|740.2 AVG	|inserting 800 rows, squeak types
+|benchmarkSelect10	|5.4 AVG	|7.8 AVG	|selecting 10 rows, squeak types
+|benchmarkSelect100	|49.2 AVG	|55.9 AVG	|selecting 100 rows, squeak types
+|benchmarkSelect1000	|485.5 AVG	|537.4 AVG	|selecting 1000 rows, squeak types
 
-All backends together
+!!!All backends together
 
-Benchmark	PostgreSQL	MySQL	Oracle	SQL Server	Sqlite3
-benchmarkInsert	773.8 	196.5 	2510.7 	1240.8 	3843.9
-benchmarkInsertConverted	1352.5 	748.9 	3568.5 	1655.4 	4141.6
-benchmarkSelect10	5.0 	5.4 	12.3 	10.8 	2.9
-benchmarkSelect100	44.3 	49.2 	67.8 	32.2 	24.5
-benchmarkSelect1000	430.1 	485.5 	630.7 	301.8 	204.6
+|!Benchmark	|!PostgreSQL	|!MySQL	|!Oracle	|!SQL Server	|!Sqlite3
+|benchmarkInsert	|773.8 	|196.5 	|2510.7 	|1240.8 	|3843.9
+|benchmarkInsertConverted	|1352.5 	|748.9 	|3568.5 	|1655.4 	|4141.6
+|benchmarkSelect10	|5.0 	|5.4 	|12.3 	|10.8 	|2.9
+|benchmarkSelect100	|44.3 	|49.2 	|67.8 	|32.2 	|24.5
+|benchmarkSelect1000	|430.1 	|485.5 	|630.7  |301.8 	|204.6
 
 
-Results in Windows
+!!!Results in Windows
 Here, all backends were running in localhost with a VirtualBox VM.
-All backends together
+!!!All backends together
 
-Benchmark	PostgreSQL	MySQL	Oracle	SQL Server	Sqlite3
-benchmarkInsert	1408.1 			1649.5 	
-benchmarkInsertConverted	1924.6 			2276.8 	
-benchmarkSelect10	3.1 			2.1 	
-benchmarkSelect100	15.1 			14.4 	
-benchmarkSelect1000	148.2 			144.2 	
+|!Benchmark	|!PostgreSQL	|!MySQL	Oracle	|!SQL Server	|!Sqlite3
+|benchmarkInsert	|1408.1 |		|	|1649.5 	
+|benchmarkInsertConverted	|1924.6 |	|	|2276.8 	
+|benchmarkSelect10	|3.1 	|	|	|2.1 	
+|benchmarkSelect100	|15.1 	|	|	|14.4 	
+|benchmarkSelect1000	|148.2 	|	|	|144.2 	
 
 
-Big benchmarks
+!!Big benchmarks
 We added some benchmarking for big operations. The important things about big benchmarks is that each test (insert test and select test) is run simultaneously with the other. The test are fork. This is parallelism. Selects and inserts are beeing executed parallel.
 The inserts is about 100.000 rows. The select is about 100.000 rows with squeak types conversion. You can test it running:
 
-"Setting the platform"
+[[["Setting the platform"
 
 DBXBenchmark facility: DBXPostgreFacility facilityForBenchmark.
 
@@ -91,17 +91,17 @@ DBXBigBenchmarks new runAllForked.
 
 "Custom priority fork"
 
-DBXBigBenchmarks new runAllForked: Processor userSchedulingPriority.
+DBXBigBenchmarks new runAllForked: Processor userSchedulingPriority.]]]
 
 You can set the facility for the backend you want.
 
-Results
+!!!Results
 
-Thread priority	PostgreSQL inserts	PostgreSQL selects	MySQL inserts	MySQL selects	Oracle inserts	Oracle selects	MSSQL inserts	MSSQL selects	Sqlite3 inserts	Sqlite3 selects
-No thread	132941.0	38784.0	28612.0 	39754.0 	325784.0 	57304.0 	215713.0 	42591.0 	470728.0 	15481.0
-timingPriority	113272.0	37825.0	26078.0 	38882.0 	208195.0	58973.0 	180674.0 	45184.0 	443758.0 	16406.0
-userSchedulingPriority	223221.0	267620.0	54630.0 	132746.0 	283811.0 	347656.0 	323739.0 	389788.0 	
-userBackgroundPriority	216585.0	257007.0	55812.0 	138922.0 	402037.0 	465609.0 	285176.0 	326647.0
+|!Thread priority	|!PostgreSQL inserts	|!PostgreSQL selects	|!MySQL inserts	|!MySQL selects	|!Oracle inserts	|!Oracle selects	|!MSSQL inserts	|!MSSQL selects	|!Sqlite3 inserts	|!Sqlite3 selects
+|No thread	|132941.0	|38784.0	|28612.0 	|39754.0 	|325784.0 	|57304.0 	|215713.0 	|42591.0 	|470728.0 	|15481.0
+|timingPriority	|113272.0	|37825.0	|26078.0 	|38882.0 	|208195.0	|58973.0 	|180674.0 	|45184.0 	|443758.0 	|16406.0
+|userSchedulingPriority	|223221.0	|267620.0	|54630.0 	|132746.0 	|283811.0 	|347656.0 	|323739.0 	|389788.0 |	|
+|userBackgroundPriority	|216585.0	|257007.0	|55812.0 	|138922.0 	|402037.0 	|465609.0 	|285176.0 	|326647.0 | | 
 
 (1) This is the best time reached (with no optimizations), but of course, the image freezes until the job is done.
 (2) The results for this level priority is almost the same as for no fork at all, and the image still freezes. This behaivor is expected.

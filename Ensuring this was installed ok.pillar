@@ -1,0 +1,23 @@
+{{title: DBXTalkDrivers}}
+{{author: DBXTalk Team}}
+!Ensuring this was installed ok
+
+The OpenDBXDriver package comes along with lots of tests cases you can use to test the installation. But before running the tests, you may want to configure the database connection settings in order to match your actual configuration. To do that, just go to the corresponsing DBXEngineFacility -i.e. DBXMySQLFacility- class in the OpenDBXDriverTests package, and modify the
+
+    #createConnection method to suite your needs.
+
+For example, if I want to configure the tests to run in my MySql database, I should go to DBXMySQLFacility>>createConnection, to see the following:
+
+[[[DBXMySQLFacility>>createConnection
+
+    self connectionSettings: (DBXConnectionSettings
+			    host: 'localhost'
+			    port: '3306'
+			    database: 'sodbxtest'
+			    userName: 'sodbxtest'
+			    userPassword: 'sodbxtest').
+  self platform: DBXMySQLBackend new.]]]
+
+There I can change the host, port, database, username and password to connecto to my own database.
+
+Then you can run the tests in the test runner :)
