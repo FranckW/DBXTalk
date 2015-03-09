@@ -1,0 +1,110 @@
+{{title: DBXTalkDrivers}}
+{{author: DBXTalk Team}}
+
+!Benchmarks
+
+We are starting on benchmarks. You can execute it yourself and get some conclusions. Till now, we have some real information, this will be here. We have 2 types of benchmarks: tiny and big. And, for each of them, we have many tests.
+
+!!!Settings
+
+-Intel Core 2 duo, 2 GB RAM.
+-All databases running in localhost
+-In Linux SQL server case, the squeakDBX was in linux and SQL Server was running in a VirtualBox VM with Windows XP. 
+
+
+!!Tini benchmarks
+""How to run them""
+[[[DBXBenchmark facility: DBXPostgreFacility facilityForBenchmark.
+
+DBXTinyBenchmarks new runAll.]]]
+
+You can set the facility for the backend you want. This test, will run 10 times and then, obtain the AVG of those run. If you want to change the number of runs, you can execute: DBXBenchmark defaultRuns: 100. The important things about tiny benchmarks is that each test is run after other. There is no fork at all. No parallelism here.
+
+To run native driver benchmarks, you can do:
+
+[[[PGTinyBenchmarks new runAll.
+MysqlTinyBenchmarks new runAll.]]]
+
+
+
+Remember you must have the native driver install it. You can install them trough Universes.
+
+!!!Results in Linux
+
+!!PostgreSQL
+In this case, we not only do benchmarks, but also compare the results with squeak native PostgreSQL driver.
+PostgreSQL 8.3, localhost
+
+|!Benchmark	|!SqueakDBX Time (millis)	|!Native driver Time (millis)	|!Explanation
+|benchmarkInsert	|773.8 AVG	|1097.63 AVG	|inserting 800 rows, all strings
+|benchmarkInsertConverted	|1352.5 AVG	|1793.03 AVG	|inserting 800 rows, squeak types
+|benchmarkSelect10	|5.0 AVG	|5.67 AVG	|selecting 10 rows, squeak types
+|benchmarkSelect100	|44.3 AVG	|42.32 AVG	|selecting 100 rows, squeak types
+|benchmarkSelect1000	|430.1 AVG	|428.82 AVG	|selecting 1000 rows, squeak types
+
+!!MySQL
+
+|Benchmark	SqueakDBX Time (millis)	Native driver Time (millis)	Explanation
+|benchmarkInsert	196.5 AVG	278.9 AVG	inserting 800 rows, all strings
+|benchmarkInsertConverted	748.9 AVG	740.2 AVG	inserting 800 rows, squeak types
+|benchmarkSelect10	5.4 AVG	7.8 AVG	selecting 10 rows, squeak types
+|benchmarkSelect100	49.2 AVG	55.9 AVG	selecting 100 rows, squeak types
+|benchmarkSelect1000	485.5 AVG	537.4 AVG	selecting 1000 rows, squeak types
+
+All backends together
+
+Benchmark	PostgreSQL	MySQL	Oracle	SQL Server	Sqlite3
+benchmarkInsert	773.8 	196.5 	2510.7 	1240.8 	3843.9
+benchmarkInsertConverted	1352.5 	748.9 	3568.5 	1655.4 	4141.6
+benchmarkSelect10	5.0 	5.4 	12.3 	10.8 	2.9
+benchmarkSelect100	44.3 	49.2 	67.8 	32.2 	24.5
+benchmarkSelect1000	430.1 	485.5 	630.7 	301.8 	204.6
+
+
+Results in Windows
+Here, all backends were running in localhost with a VirtualBox VM.
+All backends together
+
+Benchmark	PostgreSQL	MySQL	Oracle	SQL Server	Sqlite3
+benchmarkInsert	1408.1 			1649.5 	
+benchmarkInsertConverted	1924.6 			2276.8 	
+benchmarkSelect10	3.1 			2.1 	
+benchmarkSelect100	15.1 			14.4 	
+benchmarkSelect1000	148.2 			144.2 	
+
+
+Big benchmarks
+We added some benchmarking for big operations. The important things about big benchmarks is that each test (insert test and select test) is run simultaneously with the other. The test are fork. This is parallelism. Selects and inserts are beeing executed parallel.
+The inserts is about 100.000 rows. The select is about 100.000 rows with squeak types conversion. You can test it running:
+
+"Setting the platform"
+
+DBXBenchmark facility: DBXPostgreFacility facilityForBenchmark.
+
+"No fork"
+
+DBXBigBenchmarks new runAll.
+
+"Default priority fork"
+
+DBXBigBenchmarks new runAllForked.
+
+"Custom priority fork"
+
+DBXBigBenchmarks new runAllForked: Processor userSchedulingPriority.
+
+You can set the facility for the backend you want.
+
+Results
+
+Thread priority	PostgreSQL inserts	PostgreSQL selects	MySQL inserts	MySQL selects	Oracle inserts	Oracle selects	MSSQL inserts	MSSQL selects	Sqlite3 inserts	Sqlite3 selects
+No thread	132941.0	38784.0	28612.0 	39754.0 	325784.0 	57304.0 	215713.0 	42591.0 	470728.0 	15481.0
+timingPriority	113272.0	37825.0	26078.0 	38882.0 	208195.0	58973.0 	180674.0 	45184.0 	443758.0 	16406.0
+userSchedulingPriority	223221.0	267620.0	54630.0 	132746.0 	283811.0 	347656.0 	323739.0 	389788.0 	
+userBackgroundPriority	216585.0	257007.0	55812.0 	138922.0 	402037.0 	465609.0 	285176.0 	326647.0
+
+(1) This is the best time reached (with no optimizations), but of course, the image freezes until the job is done.
+(2) The results for this level priority is almost the same as for no fork at all, and the image still freezes. This behaivor is expected.
+(3) Here the performance begin to degrade, but the image retains some control, not very good for UI, but maybe is a good choice for seaside applications -we need more tests here-
+(4) This is the worst performance result, but as expected, the best for avoiding image freezing (no block is perceived) 
+

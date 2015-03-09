@@ -1,0 +1,16 @@
+{{title: DBXTalkDrivers}}
+{{author: DBXTalk Team}}
+!Asynchronous queries
+
+OpenDBX, when possible, uses asynchronous queries.
+
+Unfortunately, only some database client libraries support real asynchronous queries and important ones like MySQL and Oracle don¡¯t.
+
+This are the combinations that work:
+
+-MSSQL/All
+-PostgreSQL/Linux-
+-SQLite/All
+-SQLite3/All
+
+PostgreSQL/Windows and Sybase might be possible but aren¡¯t implemented yet.
